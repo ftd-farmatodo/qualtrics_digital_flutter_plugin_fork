@@ -46,6 +46,10 @@ android {
     defaultConfig {
         minSdkVersion 21
     }
+
+    configurations {
+        all*.exclude group: 'xmlpull', module: 'xmlpull'
+    }
 }
 
 dependencies {

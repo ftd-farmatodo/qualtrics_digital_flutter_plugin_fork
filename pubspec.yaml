@@ -1,7 +1,8 @@
 name: qualtrics_digital_flutter_plugin
 description: Flutter plugin for the Qualtrics Website/App Feedback projects.
-version: 1.1.0
+version: 1.2.0
 homepage: https://www.qualtrics.com/support/website-app-feedback/getting-started-with-website-app-feedback/getting-started-with-website-feedback/
+documentation: https://api.qualtrics.com/ZG9jOjg3NjY0NQ-qualtrics-software-development-kits#mobile-flutter-intercept-sdk
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
