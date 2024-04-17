@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class QualtricsDigitalFlutterPlugin {
@@ -94,8 +95,22 @@ class QualtricsDigitalFlutterPlugin {
     await _channel.invokeMethod("setDateTime", <String, String>{"key": key});
   }
 
-  Future<bool> qualify() async {
+  Future<bool> qualify(BuildContext context) async {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => Material(
+        type: MaterialType.transparency,
+        child: Center(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+          ),
+        ),
+      ),
+    );
     final String displayResult = await _channel.invokeMethod('qualify');
+    Navigator.pop(context);
     return displayResult == 'true';
   }
 }
