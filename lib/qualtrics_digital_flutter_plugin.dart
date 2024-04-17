@@ -1,35 +1,26 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class QualtricsDigitalFlutterPlugin {
-  static const MethodChannel _channel =
-      MethodChannel('qualtrics_digital_flutter_plugin');
+  static const MethodChannel _channel = MethodChannel('qualtrics_digital_flutter_plugin');
 
-  Future<Map<String, String>> initializeProject(
-      String brandId, String projectId) async {
-    final Map<dynamic, dynamic> result = await _channel.invokeMethod(
-        'initializeProject',
-        <String, dynamic>{"brandId": brandId, "projectId": projectId});
+  Future<Map<String, String>> initializeProject(String brandId, String projectId) async {
+    final Map<dynamic, dynamic> result = await _channel.invokeMethod('initializeProject', <String, dynamic>{"brandId": brandId, "projectId": projectId});
     return result.cast<String, String>();
   }
 
-  Future<Map<String, String>> initializeProjectWithExtRefId(
-      String brandId, String projectId, String extRefId) async {
-    final Map<dynamic, dynamic> result = await _channel.invokeMethod(
-        'initializeProjectWithExtRefId', <String, dynamic>{
-      "brandId": brandId,
-      "projectId": projectId,
-      "extRefId": extRefId
-    });
+  Future<Map<String, String>> initializeProjectWithExtRefId(String brandId, String projectId, String extRefId) async {
+    final Map<dynamic, dynamic> result =
+        await _channel.invokeMethod('initializeProjectWithExtRefId', <String, dynamic>{"brandId": brandId, "projectId": projectId, "extRefId": extRefId});
     return result.cast<String, String>();
   }
 
   Future<Map<String, Map<String, String>>> evaluateProject() async {
-    final Map<dynamic, dynamic> result =
-        await _channel.invokeMethod('evaluateProject');
+    final Map<dynamic, dynamic> result = await _channel.invokeMethod('evaluateProject');
     Map<String, Map<String, String>> evaluateProjectResult = HashMap();
     result.forEach((key, value) {
       Map<dynamic, dynamic> targetingResult = result[key];
@@ -45,32 +36,26 @@ class QualtricsDigitalFlutterPlugin {
   }
 
   Future<Map<String, String>> evaluateIntercept(String interceptId) async {
-    final Map<dynamic, dynamic> evaluateInterceptResult = await _channel
-        .invokeMethod(
-            'evaluateIntercept', <String, dynamic>{"interceptId": interceptId});
+    final Map<dynamic, dynamic> evaluateInterceptResult = await _channel.invokeMethod('evaluateIntercept', <String, dynamic>{"interceptId": interceptId});
     return evaluateInterceptResult.cast<String, String>();
   }
 
   Future<bool> displayIntercept(String interceptId) async {
-    var displayResult = await _channel.invokeMethod(
-        'displayIntercept', <String, dynamic>{"interceptId": interceptId});
+    var displayResult = await _channel.invokeMethod('displayIntercept', <String, dynamic>{"interceptId": interceptId});
     return displayResult;
   }
 
   Future<bool> displayTarget(String targetUrl) async {
-    var displayResult = await _channel.invokeMethod(
-        'displayTarget', <String, dynamic>{"targetUrl": targetUrl});
+    var displayResult = await _channel.invokeMethod('displayTarget', <String, dynamic>{"targetUrl": targetUrl});
     return displayResult;
   }
 
   Future<void> setLogLevel(String logLevel) async {
-    await _channel
-        .invokeMethod("setLogLevel", <String, String>{"logLevel": logLevel});
+    await _channel.invokeMethod("setLogLevel", <String, String>{"logLevel": logLevel});
   }
 
   Future<void> registerViewVisit(String viewName) async {
-    await _channel.invokeMethod(
-        "registerViewVisit", <String, String>{"viewName": viewName});
+    await _channel.invokeMethod("registerViewVisit", <String, String>{"viewName": viewName});
   }
 
   Future<void> resetTimer() async {
@@ -82,13 +67,11 @@ class QualtricsDigitalFlutterPlugin {
   }
 
   Future<void> setString(String key, String value) async {
-    await _channel.invokeMethod(
-        "setString", <String, String>{"key": key, "value": value});
+    await _channel.invokeMethod("setString", <String, String>{"key": key, "value": value});
   }
 
   Future<void> setNumber(String key, double value) async {
-    await _channel.invokeMethod(
-        "setNumber", <String, dynamic>{"key": key, "value": value});
+    await _channel.invokeMethod("setNumber", <String, dynamic>{"key": key, "value": value});
   }
 
   Future<void> setDateTime(String key) async {
@@ -96,21 +79,25 @@ class QualtricsDigitalFlutterPlugin {
   }
 
   Future<bool> qualify(BuildContext context) async {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) => Material(
-        type: MaterialType.transparency,
-        child: Center(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+    if (Platform.isIOS) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => Material(
+          type: MaterialType.transparency,
+          child: Center(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
     final String displayResult = await _channel.invokeMethod('qualify');
-    Navigator.pop(context);
+    if (Platform.isIOS) {
+      Navigator.pop(context);
+    }
     return displayResult == 'true';
   }
 }
