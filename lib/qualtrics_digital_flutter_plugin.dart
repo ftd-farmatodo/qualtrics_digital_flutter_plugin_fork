@@ -79,25 +79,7 @@ class QualtricsDigitalFlutterPlugin {
   }
 
   Future<bool> qualify(BuildContext context) async {
-    if (Platform.isIOS) {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (_) => Material(
-          type: MaterialType.transparency,
-          child: Center(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-            ),
-          ),
-        ),
-      );
-    }
     final String displayResult = await _channel.invokeMethod('qualify');
-    if (Platform.isIOS) {
-      Navigator.pop(context);
-    }
     return displayResult == 'true';
   }
 }
